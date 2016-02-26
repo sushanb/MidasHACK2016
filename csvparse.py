@@ -1,6 +1,6 @@
 import os
 import csv
-import pprint
+import json
 
 indir = '/home/saurav/MidasHACK2016/'
 
@@ -61,7 +61,7 @@ state_dict = {
 	'SD': {}, 
 	'NE': {}, 
 	'IA': {}, 
-	'MS': {}, 
+	'MS': {}, 	
 	'IN': {}, 
 	'IL': {}, 
 	'MN': {}, 
@@ -103,53 +103,44 @@ for key in state_dict:
 				cognitive_yes += 1
 			elif drem_value == '2':
 				cognitive_no += 1
-			else:	
-				cognitive_na += 1
 			#ambu
 			ambu_value = row[249] 
-			if ambu_value=='1':  #Yes for Ambu
-		        	ambu_yes+=1
-		    	elif ambu_value=='2': #N/A for Ambu
-		        	ambu_no+=1
-		    	else: #No for Ambu
-		        	ambu_na+=1
+			if ambu_value =='1':  #Yes for Ambu
+			    ambu_yes+=1
+			elif ambu_value == '2':
+				ambu_no+=1
 		    #Vison effect Deye
 		    #Deye for vision
 			deye_count = row[247]
 			if deye_count == '1':
-				count_1 += 1
+			    count_1 += 1
 			elif deye_count == '2':
-				count_2 += 1
-			else:
-				other_count += 1
+			    count_2 += 1
 			#Hearing difficulty
 			#dear
 			dear_value=row[246]
 			if dear_value == '1':
-				hearing_yes += 1
+			    hearing_yes += 1
 			elif dear_value == '2':
-				hearing_no += 1
-			else:	
-				hearing_na += 1
-		#total_population is the same for all difficulties
+			    hearing_no += 1
+	#total_population is the same for all difficulties
 	total_population = cognitive_yes + cognitive_no + cognitive_na
 	#average cognitive difficulty
-	avg_cogn_yes = round((float(cognitive_yes) / total_population) * 100, 2)
-	avg_cogn_no = round((float(cognitive_no) / total_population) * 100, 2)
-	avg_cogn_na = 100 - avg_cogn_no - avg_cogn_yes
+	avg_cogn_yes = float(cognitive_yes) / total_population * 100 
+	avg_cogn_no = float(cognitive_no) / total_population * 100 
+	avg_cogn_na = 100.0 - avg_cogn_no - avg_cogn_yes
 	#average ambulatory difficulty
-	avg_ambu_yes = round((float(ambu_yes) / total_population) * 100, 2) 
-	avg_ambu_no = round((float(ambu_no) / total_population) * 100, 2)
-	avg_ambu_na = 100 - avg_cogn_no - avg_cogn_yes
+	avg_ambu_yes = float(ambu_yes) / total_population * 100  
+	avg_ambu_no = float(ambu_no) / total_population * 100 
+	avg_ambu_na = 100.0 - avg_cogn_no - avg_cogn_yes
 	#average vision difficulty
-	vision_difficulty_yes = round((float(count_1) / total_population) * 100, 2)
-	vision_difficulty_no = round((float(count_2) / total_population) * 100, 2)
-	vision_na = 100 - vision_difficulty_no - vision_difficulty_yes
+	vision_difficulty_yes = float(count_1) / total_population * 100 
+	vision_difficulty_no = float(count_2)/ total_population * 100 
+	vision_na = 100.0 - vision_difficulty_no - vision_difficulty_yes
 	#average hearing difficulty
-	avg_hear_yes = round((float(hearing_yes)/total_population)*100, 2)
-	avg_hear_no = round((float(hearing_no)/total_population)*100, 2)
-	avg_hear_na = 100 - avg_hear_no - avg_hear_yes
-	pprint.pprint(state_dict)
+	avg_hear_yes = float(hearing_yes) / total_population * 100
+	avg_hear_no = float(hearing_no) / total_population * 100
+	avg_hear_na = 100.0 - avg_hear_no - avg_hear_yes
 	print '--------------'
 	state_dict[key]['avg_cogn_yes'] = avg_cogn_yes	
 	state_dict[key]['avg_cogn_no'] = avg_cogn_no
@@ -163,8 +154,10 @@ for key in state_dict:
 	state_dict[key]['avg_hear_yes'] = avg_hear_yes
 	state_dict[key]['avg_hear_no'] = avg_hear_no
 	state_dict[key]['avg_hear_na'] = avg_hear_na
-	pprint.pprint(state_dict)
-	break
+	#writing all files to a json file.
+	with open("data.json","w") as f:
+		json.dump(state_dict, f)
+	
 
 
 
