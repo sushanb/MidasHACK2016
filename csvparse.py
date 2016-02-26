@@ -1,5 +1,6 @@
 import os
 import csv
+import pprint
 
 indir = '/home/saurav/MidasHACK2016/'
 
@@ -20,57 +21,57 @@ values_dict = {
 }
 # Initialize a state dict for final values
 state_dict = {
-	'HI': values_dict, 
-	'AK': values_dict, 
-	'FL': values_dict, 
-	'SC': values_dict, 
-	'GA': values_dict, 
-	'AL': values_dict, 
-	'NC': values_dict, 
-	'TN': values_dict, 
-	'RI': values_dict, 
-	'CT': values_dict, 
-	'MA': values_dict,
-	'ME': values_dict, 
-	'NH': values_dict, 
-	'VT': values_dict, 
-	'NY': values_dict, 
-	'NJ': values_dict, 
-	'PA': values_dict, 
-	'DE': values_dict,
-	'MD': values_dict,
-	'WV': values_dict,
-	'KY': values_dict, 
-	'OH': values_dict, 
-	'MI': values_dict, 
-	'WY': values_dict, 
-	'MT': values_dict,
-	'ID': values_dict,
-	'WA': values_dict,
-	'DC': values_dict,
-	'TX': values_dict,
-	'CA': values_dict,
-	'AZ': values_dict,
-	'NV': values_dict, 
-	'UT': values_dict, 
-	'CO': values_dict, 
-	'NM': values_dict, 
-	'OR': values_dict, 
-	'ND': values_dict, 
-	'SD': values_dict, 
-	'NE': values_dict, 
-	'IA': values_dict, 
-	'MS': values_dict, 
-	'IN': values_dict, 
-	'IL': values_dict, 
-	'MN': values_dict, 
-	'WI': values_dict, 
-	'MO': values_dict, 
-	'AR': values_dict, 
-	'OK': values_dict, 
-	'KS': values_dict, 
-	'LS': values_dict, 
-	'VA': values_dict
+	'HI': {}, 
+	'AK': {}, 
+	'FL': {}, 
+	'SC': {}, 
+	'GA': {}, 
+	'AL': {}, 
+	'NC': {}, 
+	'TN': {}, 
+	'RI': {}, 
+	'CT': {}, 
+	'MA': {},
+	'ME': {}, 
+	'NH': {}, 
+	'VT': {}, 
+	'NY': {}, 
+	'NJ': {}, 
+	'PA': {}, 
+	'DE': {},
+	'MD': {},
+	'WV': {},
+	'KY': {}, 
+	'OH': {}, 
+	'MI': {}, 
+	'WY': {}, 
+	'MT': {},
+	'ID': {},
+	'WA': {},
+	'DC': {},
+	'TX': {},
+	'CA': {},
+	'AZ': {},
+	'NV': {}, 
+	'UT': {}, 
+	'CO': {}, 
+	'NM': {}, 
+	'OR': {}, 
+	'ND': {}, 
+	'SD': {}, 
+	'NE': {}, 
+	'IA': {}, 
+	'MS': {}, 
+	'IN': {}, 
+	'IL': {}, 
+	'MN': {}, 
+	'WI': {}, 
+	'MO': {}, 
+	'AR': {}, 
+	'OK': {}, 
+	'KS': {}, 
+	'LA': {}, 
+	'VA': {}
 }
 
 for key in state_dict:
@@ -131,21 +132,40 @@ for key in state_dict:
 			else:	
 				hearing_na += 1
 		#total_population is the same for all difficulties
-	total_population += cognitive_yes + cognitive_no + cognitive_na
+	total_population = cognitive_yes + cognitive_no + cognitive_na
 	#average cognitive difficulty
-	avg_cogn_yes = (float(cognitive_yes) / total_population) * 100
-	avg_cogn_no = (float(cognitive_no) / total_population) * 100
-	avg_cogn_na = (float(cognitive_na) / total_population) * 100
+	avg_cogn_yes = round((float(cognitive_yes) / total_population) * 100, 2)
+	avg_cogn_no = round((float(cognitive_no) / total_population) * 100, 2)
+	avg_cogn_na = 100 - avg_cogn_no - avg_cogn_yes
 	#average ambulatory difficulty
-	avg_ambu_yes = (float(ambu_yes) / total_population) * 100 
-	avg_ambu_no = (float(ambu_no) / total_population) * 100
-	avg_ambu_na = (float(ambu_na) / total_population) * 100
+	avg_ambu_yes = round((float(ambu_yes) / total_population) * 100, 2) 
+	avg_ambu_no = round((float(ambu_no) / total_population) * 100, 2)
+	avg_ambu_na = 100 - avg_cogn_no - avg_cogn_yes
 	#average vision difficulty
-	vision_difficulty_yes = (float(count_1) / total_population) * 100
-	vision_difficulty_no = (float(count_2) / total_population) * 100
-	vision_na = (float(other_count) / total_population) * 100
+	vision_difficulty_yes = round((float(count_1) / total_population) * 100, 2)
+	vision_difficulty_no = round((float(count_2) / total_population) * 100, 2)
+	vision_na = 100 - vision_difficulty_no - vision_difficulty_yes
 	#average hearing difficulty
-	avg_hear_yes = (float(hearing_yes)/total_population)*100
-	avg_hear_no = (float(hearing_no)/total_population)*100
-	avg_hear_na = (float(hearing_na)/total_population)*100
+	avg_hear_yes = round((float(hearing_yes)/total_population)*100, 2)
+	avg_hear_no = round((float(hearing_no)/total_population)*100, 2)
+	avg_hear_na = 100 - avg_hear_no - avg_hear_yes
+	pprint.pprint(state_dict)
+	print '--------------'
+	state_dict[key]['avg_cogn_yes'] = avg_cogn_yes	
+	state_dict[key]['avg_cogn_no'] = avg_cogn_no
+	state_dict[key]['avg_cogn_na'] = avg_cogn_na
+	state_dict[key]['avg_ambu_yes'] = avg_ambu_yes
+	state_dict[key]['avg_ambu_no'] = avg_ambu_no
+	state_dict[key]['avg_ambu_na'] = avg_ambu_na
+	state_dict[key]['vision_difficulty_yes'] = vision_difficulty_yes
+	state_dict[key]['vision_difficulty_no'] = vision_difficulty_no
+	state_dict[key]['vision_na'] = vision_na
+	state_dict[key]['avg_hear_yes'] = avg_hear_yes
+	state_dict[key]['avg_hear_no'] = avg_hear_no
+	state_dict[key]['avg_hear_na'] = avg_hear_na
+	pprint.pprint(state_dict)
+	break
+
+
+
 
