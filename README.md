@@ -11,6 +11,8 @@ We used Python script for reading and selecting the four columns of each CSV fie
 
 When we fully ran our script on all data sheets of 51 states, we generated a JSON file from the nested dictionary.
 
+For the front end side, we used D3.js for visualizing the results of the JSON file.
+
 
 Contributers:
 Saurav K Aryal
